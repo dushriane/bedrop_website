@@ -29,7 +29,7 @@ export const authOptions: NextAuthOptions = {
         );
 
         const user = users.find(
-          (u: any) =>
+          (u: { email: string; password: string; id: string; name?: string }) =>
             u.email === credentials.email &&
             u.password === credentials.password
         );

@@ -3,7 +3,8 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { incidentSchema } from '@/lib/validation';
 
-export async function GET(request: NextRequest) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export async function GET(_request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
@@ -16,7 +17,7 @@ export async function GET(request: NextRequest) {
     );
 
     const userIncidents = incidents.filter(
-      (i: any) => i.userId === session.user!.id
+      (i: { userId: string }) => i.userId === session.user!.id
     );
 
     return NextResponse.json(userIncidents);
@@ -55,9 +56,10 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json(newIncident, { status: 201 });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Failed to create incident';
     return NextResponse.json(
-      { message: error.message || 'Failed to create incident' },
+      { message },
       { status: 400 }
     );
   }
@@ -85,7 +87,7 @@ export async function DELETE(request: NextRequest) {
     );
 
     const updatedIncidents = incidents.filter(
-      (i: any) => !(i.id === id && i.userId === session.user!.id)
+      (i: { id: string; userId: string }) => !(i.id === id && i.userId === session.user!.id)
     );
 
     if (globalThis.localStorage) {

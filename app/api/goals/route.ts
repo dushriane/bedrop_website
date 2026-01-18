@@ -3,7 +3,8 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { goalSchema } from '@/lib/validation';
 
-export async function GET(request: NextRequest) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export async function GET(_request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
@@ -12,7 +13,7 @@ export async function GET(request: NextRequest) {
 
     const goals = JSON.parse(globalThis.localStorage?.getItem('goals') || '[]');
 
-    const userGoals = goals.filter((g: any) => g.userId === session.user!.id);
+    const userGoals = goals.filter((g: { userId: string }) => g.userId === session.user!.id);
 
     return NextResponse.json(userGoals);
   } catch (error) {
@@ -50,9 +51,10 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json(newGoal, { status: 201 });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Failed to create goal';
     return NextResponse.json(
-      { message: error.message || 'Failed to create goal' },
+      { message },
       { status: 400 }
     );
   }

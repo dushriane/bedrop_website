@@ -20,11 +20,17 @@ const nextConfig = {
       enabled: true,
     },
   },
-  webpack: (config) => {
+  webpack: (config, { isServer }) => {
     config.resolve.fallback = {
       ...config.resolve.fallback,
       fs: false,
     };
+    
+    // Fix Windows path casing issues
+    if (!isServer) {
+      config.resolve.symlinks = false;
+    }
+    
     return config;
   },
 };

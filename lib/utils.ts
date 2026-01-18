@@ -31,7 +31,7 @@ export function getWeekNumber(date: Date): number {
   return Math.ceil((days + firstDay.getDay() + 1) / 7);
 }
 
-export function calculateStreakInfo(incidents: any[]) {
+export function calculateStreakInfo(incidents: { date: string | Date }[]) {
   if (incidents.length === 0) {
     return { currentStreak: 0, longestStreak: 0 };
   }

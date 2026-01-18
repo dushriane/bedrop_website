@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
     );
 
     // Check if user exists
-    if (users.find((u: any) => u.email === validatedData.email)) {
+    if (users.find((u: { email: string }) => u.email === validatedData.email)) {
       return NextResponse.json(
         { message: 'User already exists' },
         { status: 400 }
@@ -39,9 +39,10 @@ export async function POST(request: NextRequest) {
       },
       { status: 201 }
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Registration failed';
     return NextResponse.json(
-      { message: error.message || 'Registration failed' },
+      { message },
       { status: 400 }
     );
   }

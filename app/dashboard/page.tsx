@@ -77,7 +77,7 @@ export default function DashboardPage() {
         <h1 className="text-4xl font-bold mb-2">
           Welcome back, {session?.user?.name}!
         </h1>
-        <p className="text-gray-600 mb-8">Here's your progress overview</p>
+        <p className="text-gray-600 mb-8">Here&apos;s your progress overview</p>
 
         {/* Daily Tip */}
         <Card className="mb-8 bg-gradient-to-r from-blue-500 to-purple-500 text-white">

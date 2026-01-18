@@ -3,7 +3,8 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { drinkSchema } from '@/lib/validation';
 
-export async function GET(request: NextRequest) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export async function GET(_request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
@@ -14,7 +15,7 @@ export async function GET(request: NextRequest) {
       globalThis.localStorage?.getItem('drinks') || '[]'
     );
 
-    const userDrinks = drinks.filter((d: any) => d.userId === session.user!.id);
+    const userDrinks = drinks.filter((d: { userId: string }) => d.userId === session.user!.id);
 
     return NextResponse.json(userDrinks);
   } catch (error) {
@@ -53,9 +54,10 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json(newDrink, { status: 201 });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Failed to create drink';
     return NextResponse.json(
-      { message: error.message || 'Failed to create drink' },
+      { message },
       { status: 400 }
     );
   }
