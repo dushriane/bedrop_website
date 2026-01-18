@@ -6,13 +6,13 @@ import { goalSchema } from '@/lib/validation';
 export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
-    if (!session?.user) {
+    if (!session?.user?.id) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
     const goals = JSON.parse(globalThis.localStorage?.getItem('goals') || '[]');
 
-    const userGoals = goals.filter((g: any) => g.userId === session.user.id);
+    const userGoals = goals.filter((g: any) => g.userId === session.user!.id);
 
     return NextResponse.json(userGoals);
   } catch (error) {
@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
-    if (!session?.user) {
+    if (!session?.user?.id) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
 
     const newGoal = {
       id: Date.now().toString(),
-      userId: session.user.id,
+      userId: session.user!.id,
       ...validatedData,
       progress: 0,
       completed: false,

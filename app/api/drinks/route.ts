@@ -6,7 +6,7 @@ import { drinkSchema } from '@/lib/validation';
 export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
-    if (!session?.user) {
+    if (!session?.user?.id) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
       globalThis.localStorage?.getItem('drinks') || '[]'
     );
 
-    const userDrinks = drinks.filter((d: any) => d.userId === session.user.id);
+    const userDrinks = drinks.filter((d: any) => d.userId === session.user!.id);
 
     return NextResponse.json(userDrinks);
   } catch (error) {
@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
-    if (!session?.user) {
+    if (!session?.user?.id) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
 
     const newDrink = {
       id: Date.now().toString(),
-      userId: session.user.id,
+      userId: session.user!.id,
       date: new Date().toISOString().split('T')[0],
       ...validatedData,
       createdAt: new Date().toISOString(),

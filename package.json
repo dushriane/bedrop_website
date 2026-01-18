@@ -59,7 +59,8 @@
     "@next/mdx": "^14.2.0",
     "date-fns": "^3.3.0",
     "lucide-react": "^0.358.0",
-    "sonner": "^1.4.0"
+    "sonner": "^1.4.0",
+    "next-themes": "^0.2.1"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",

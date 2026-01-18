@@ -6,7 +6,7 @@ import { incidentSchema } from '@/lib/validation';
 export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
-    if (!session?.user) {
+    if (!session?.user?.id) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
     );
 
     const userIncidents = incidents.filter(
-      (i: any) => i.userId === session.user.id
+      (i: any) => i.userId === session.user!.id
     );
 
     return NextResponse.json(userIncidents);
@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
-    if (!session?.user) {
+    if (!session?.user?.id) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
 
     const newIncident = {
       id: Date.now().toString(),
-      userId: session.user.id,
+      userId: session.user!.id,
       ...validatedData,
       createdAt: new Date().toISOString(),
     };
@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
 export async function DELETE(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
-    if (!session?.user) {
+    if (!session?.user?.id) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
@@ -85,7 +85,7 @@ export async function DELETE(request: NextRequest) {
     );
 
     const updatedIncidents = incidents.filter(
-      (i: any) => !(i.id === id && i.userId === session.user.id)
+      (i: any) => !(i.id === id && i.userId === session.user!.id)
     );
 
     if (globalThis.localStorage) {
