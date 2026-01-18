@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const withMDX = require('@next/mdx')({
   extension: /\.mdx?$/,
   options: {
@@ -15,11 +16,7 @@ const nextConfig = {
     domains: [],
     formats: ['image/avif', 'image/webp'],
   },
-  experimental: {
-    serverActions: {
-      enabled: true,
-    },
-  },
+  
   webpack: (config, { isServer }) => {
     config.resolve.fallback = {
       ...config.resolve.fallback,
