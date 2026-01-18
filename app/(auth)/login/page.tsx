@@ -31,12 +31,12 @@ export default function LoginPage() {
 
       if (result?.error) {
         toast.error('Invalid credentials');
-      } else {
+      } else if (result?.ok){
         toast.success('Login successful!');
         router.push('/dashboard');
         router.refresh();
       }
-    } catch (error) {
+    } catch {
       toast.error('An error occurred. Please try again.');
     } finally {
       setIsLoading(false);

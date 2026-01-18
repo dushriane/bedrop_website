@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'BeDrop - Bedwetting Tracker',
   description: 'Track, analyze, and manage bedwetting incidents with goals and insights.',
-  //manifest: '/manifest.json',
+  manifest: '/manifest.json',
 };
 
 export default function RootLayout({
